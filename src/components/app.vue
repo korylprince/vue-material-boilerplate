@@ -1,0 +1,69 @@
+<template>
+    <div id="root" class="page-container">
+        <md-app>
+            <md-app-toolbar class="md-primary">
+                <router-link class="md-title" to="/">My App</router-link>
+
+                <span v-show="name">{{name}}</span>
+
+                <div v-show="signed_in">
+                    <md-menu md-direction="bottom-start">
+                        <md-button class="md-icon-button" md-menu-trigger>
+                            <md-icon>more_vert</md-icon>
+                        </md-button>
+
+                        <md-menu-content>
+                            <md-menu-item @click="signout">Sign Out</md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+            </md-app-toolbar>
+
+            <md-app-content id="content">
+                <router-view></router-view>
+            </md-app-content>
+        </md-app>
+
+
+        <md-dialog-alert
+            :md-active="show_dialog"
+            @update:mdActive="$store.commit('UPDATE_ERROR', null)"
+            md-title="Error"
+            :md-content="error"
+            ></md-dialog-alert>
+    </div>
+</template>
+
+<script>
+import {mapState, mapGetters, mapActions} from "vuex"
+export default {
+    name: "my-app",
+    computed: {
+        ...mapState({
+            "name": "name",
+            "error": "last_error"
+        }),
+        ...mapGetters(["signed_in", "show_dialog"])
+    },
+    methods: {
+        ...mapActions(["signout"])
+    }
+}
+</script>
+
+<style lang="stylus">
+.md-toolbar .md-title
+    flex: 1
+
+    &:hover
+        text-decoration: none
+        font-weight: 500
+
+#content
+    background-color: inherit
+
+    > div, form
+        max-width: 600px
+        margin-left: auto
+        margin-right: auto
+</style>

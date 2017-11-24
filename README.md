@@ -1,0 +1,36 @@
+# About
+
+This is an opinionated template for a [Vue](https://vuejs.org/) app. It's meant to be a starting place for new projects, getting the boring boilerplate (building, linting, authentication, routing, etc) out of the way.
+
+# Features
+
+* Material Design app components: [vue-material](https://vuematerial.io/)
+* router: [vue-router](https://router.vuejs.org/en/)
+* store: [vuex](https://vuex.vuejs.org/en/)
+* validation: [vee-validate](http://vee-validate.logaretm.com/)
+* HTTP calls: [axios](https://github.com/axios/axios)
+* pre-built authentication and sign-in page; just add an API endpoint
+* Webpack 2/Babel dev/prod build setup
+* Linting with ESLint
+
+# Get Started
+
+Clone this repo:
+
+`git clone https://github.com/korylprince/vue-material-boilerplate.git`
+
+Install packages:
+
+`npm install`
+
+Start developing:
+
+`npm run dev` or `npm run dev-server`
+
+Building for production:
+
+`npm run build-prod`
+
+# License
+
+MIT (see included `LICENSE`)
