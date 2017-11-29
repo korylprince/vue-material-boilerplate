@@ -1,3 +1,4 @@
+import "vue-material/dist/vue-material.css"
 import "./style/theme.scss"
 import "./style/app.styl"
 

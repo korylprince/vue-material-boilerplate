@@ -15,7 +15,7 @@
 
                 <md-field :class="{'md-invalid': errors.has('password')}">
                     <label>Password</label>
-                    <md-input v-model="password" name="password" v-validate="'required'"></md-input>
+                    <md-input type="password" v-model="password" name="password" v-validate="'required'"></md-input>
                     <span class="md-error">{{errors.first('password')}}</span>
                 </md-field>
 
