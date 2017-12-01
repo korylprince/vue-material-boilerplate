@@ -1,5 +1,5 @@
 <template>
-    <form novalidate @submit.prevent="authenticate">
+    <form novalidate @submit.prevent="authenticate(username, password)">
         <md-card>
             <md-card-header>
                 <div class="md-title">Sign In</div>
@@ -24,7 +24,7 @@
             </md-card-content>
 
             <md-card-actions>
-                <md-button type="submit" class="md-primary" :disabled="is_loading" @click="authenticate">
+                <md-button type="submit" class="md-primary" :disabled="is_loading" @click="authenticate(username, password)">
                     <span v-show="!is_loading">Sign In</span>
                     <md-progress-spinner
                         class="app-spinner"
