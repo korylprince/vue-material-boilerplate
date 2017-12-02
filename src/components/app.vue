@@ -1,7 +1,7 @@
 <template>
     <div id="root" class="page-container">
         <md-app>
-            <md-app-toolbar class="md-primary">
+            <md-app-toolbar class="md-primary md-dense">
                 <router-link class="md-title" to="/">My App</router-link>
 
                 <span v-show="name">{{name}}</span>
@@ -55,7 +55,11 @@ export default {
 }
 </script>
 
+
 <style lang="stylus">
+#root, &>.md-app
+    min-height: 100vh
+
 .md-toolbar .md-title
     flex: 1
 
