@@ -24,7 +24,7 @@
             </md-card-content>
 
             <md-card-actions>
-                <md-button type="submit" class="md-primary" :disabled="is_loading" @click="authenticate(username, password)">
+                <md-button type="submit" class="md-primary" :disabled="is_loading">
                     <span v-show="!is_loading">Sign In</span>
                     <md-progress-spinner
                         class="app-spinner"
@@ -58,12 +58,22 @@ export default {
         authenticate(username, password) {
             if (this.is_loading) { return }
 
-            this.$validator.validateAll().then(valid => {
-                if (valid) {
-                    this.$store.dispatch("authenticate", {username, password})
-                }
-            }).catch(() => {
+            this.$validator.validateAll().catch(() => {
                 this.$store.commit("UPDATE_ERROR", "Form validation error")
+            }).then(valid => {
+                if (valid) {
+                    return this.$store.dispatch("authenticate", {username, password})
+                }
+                return Promise.reject()
+            }).then(() => {
+                var next = this.$store.getters.next_route
+                if (next == null) {
+                    next = {name: "content"}
+                }
+                this.$router.push(next)
+                this.$store.commit("UPDATE_NEXT_ROUTE", null)
+            }).catch(() => {
+                // ignore other errors
             })
         }
     }

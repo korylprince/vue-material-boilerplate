@@ -21,7 +21,8 @@ module.exports = {
         "object-curly-spacing": ["error", "never"],
         "arrow-parens": ["error", "as-needed"],
         "arrow-body-style": ["error", "always"],
-        "promise/always-return": "off"
+        "promise/always-return": "off",
+        "promise/no-return-wrap": ["error", {allowReject: true}]
     },
     plugins: [
         "html",

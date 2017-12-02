@@ -45,7 +45,7 @@ const api = {
         return promise
     },
     do_authenticated_thing(data) {
-        return store.$http().post(API_BASE + "/data", data)
+        return store.getters.$http().post(API_BASE + "/data", data)
     }
 }
 

@@ -17,12 +17,23 @@ const store = new Vuex.Store({
         _loading_count: 0,
         name: window.localStorage.getItem("name"),
         session_id: window.localStorage.getItem("session_id"),
-        next_route: null,
+        _next_route: null,
         thing: null
     },
     getters: {
         is_loading(state) {
             return state._loading_count !== 0
+        },
+        next_route(state) {
+            if (state._next_route == null) {
+                return null
+            }
+            return {
+                name: state._next_route.name,
+                path: state._next_route.path,
+                params: state._next_route.params,
+                query: state._next_route.query
+            }
         },
         signed_in(state) {
             return state.session_id != null
@@ -60,7 +71,7 @@ const store = new Vuex.Store({
             window.localStorage.removeItem("session_id")
         },
         UPDATE_NEXT_ROUTE(state, route) {
-            state.next_route = route
+            state._next_route = route
         },
         UPDATE_THING(state, thing) {
             state.thing = thing
@@ -74,19 +85,6 @@ const store = new Vuex.Store({
             promise.then(({name, session_id}) => {
                 context.commit("STOP_LOADING")
                 context.commit("UPDATE_CREDENTIALS", {name, session_id})
-
-                var to = context.state.next_route
-                if (to) {
-                    router.push({
-                        name: to.name,
-                        path: to.path,
-                        params: to.params,
-                        query: to.query
-                    })
-                    context.commit("UPDATE_NEXT_ROUTE", null)
-                } else {
-                    router.push({name: "content"})
-                }
             }).catch(error => {
                 context.commit("STOP_LOADING")
                 if (error.response !== null && error.response.status === 401) {
@@ -96,10 +94,11 @@ const store = new Vuex.Store({
                     console.error({error: error})
                 }
             })
+
+            return promise
         },
         signout(context) {
             context.commit("SIGNOUT")
-            router.push({name: "signin"})
         },
         get_thing(context) {
             context.commit("START_LOADING")

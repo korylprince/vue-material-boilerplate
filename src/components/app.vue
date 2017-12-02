@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import {mapState, mapGetters, mapActions} from "vuex"
+import {mapState, mapGetters} from "vuex"
 export default {
     name: "my-app",
     computed: {
@@ -46,7 +46,11 @@ export default {
         ...mapGetters(["signed_in", "show_dialog"])
     },
     methods: {
-        ...mapActions(["signout"])
+        signout() {
+            return this.$store.dispatch("signout").then(() => {
+                this.$router.push({name: "signin"})
+            })
+        }
     }
 }
 </script>
