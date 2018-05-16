@@ -1,10 +1,9 @@
 import path from "path"
 import webpack from "webpack"
-import ExtractTextPlugin from "extract-text-webpack-plugin"
+import VueLoaderPlugin from "vue-loader/lib/plugin"
+import MiniCssExtractPlugin from "mini-css-extract-plugin"
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import FaviconsWebpackPlugin from "favicons-webpack-plugin"
-
-var cssExtractPlugin = new ExtractTextPlugin("style/[name].css")
 
 var root = path.resolve(__dirname, "../")
 
@@ -22,34 +21,7 @@ export default {
         rules: [
             {
                 test: /\.vue$/,
-                loader: "vue-loader",
-                options: {
-                    loaders: {
-                        css: cssExtractPlugin.extract({
-                            fallback: {loader: "style-loader", options: {sourceMap: true}},
-                            use: [
-                                {loader: "css-loader", options: {importLoaders: 1, sourceMap: true}},
-                                {loader: "postcss-loader", options: {sourceMap: true}}
-                            ]
-                        }),
-                        scss: cssExtractPlugin.extract({
-                            fallback: {loader: "style-loader", options: {sourceMap: true}},
-                            use: [
-                                {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
-                                {loader: "postcss-loader", options: {sourceMap: true}},
-                                {loader: "sass-loader", options: {sourceMap: true}}
-                            ]
-                        }),
-                        stylus: cssExtractPlugin.extract({
-                            fallback: {loader: "style-loader", options: {sourceMap: true}},
-                            use: [
-                                {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
-                                {loader: "postcss-loader", options: {sourceMap: true}},
-                                {loader: "stylus-loader", options: {sourceMap: true}}
-                            ]
-                        })
-                    }
-                }
+                loader: "vue-loader"
             },
             {
                 test: /\.js$/,
@@ -58,35 +30,29 @@ export default {
             },
             {
                 test: /\.css$/,
-                use: cssExtractPlugin.extract({
-                    fallback: {loader: "style-loader", options: {sourceMap: true}},
-                    use: [
-                        {loader: "css-loader", options: {importLoaders: 1, sourceMap: true}},
-                        {loader: "postcss-loader", options: {sourceMap: true}}
-                    ]
-                })
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {loader: "css-loader", options: {importLoaders: 1, sourceMap: true}},
+                    {loader: "postcss-loader", options: {sourceMap: true}}
+                ]
             },
             {
                 test: /\.scss$/,
-                use: cssExtractPlugin.extract({
-                    fallback: {loader: "style-loader", options: {sourceMap: true}},
-                    use: [
-                        {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
-                        {loader: "postcss-loader", options: {sourceMap: true}},
-                        {loader: "sass-loader", options: {sourceMap: true}}
-                    ]
-                })
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
+                    {loader: "postcss-loader", options: {sourceMap: true}},
+                    {loader: "sass-loader", options: {sourceMap: true}}
+                ]
             },
             {
-                test: /\.styl$/,
-                use: cssExtractPlugin.extract({
-                    fallback: {loader: "style-loader", options: {sourceMap: true}},
-                    use: [
-                        {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
-                        {loader: "postcss-loader", options: {sourceMap: true}},
-                        {loader: "stylus-loader", options: {sourceMap: true}}
-                    ]
-                })
+                test: /\.styl(us)?$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
+                    {loader: "postcss-loader", options: {sourceMap: true}},
+                    {loader: "stylus-loader", options: {sourceMap: true}}
+                ]
             }
         ]
     },
@@ -98,6 +64,10 @@ export default {
     plugins: [
         new webpack.DefinePlugin({
             API_BASE: JSON.stringify(API_BASE)
+        }),
+        new VueLoaderPlugin(),
+        new MiniCssExtractPlugin({
+            filename: "style/[name].css"
         }),
         new HtmlWebpackPlugin({
             template: path.resolve(root, "src/index.html")
@@ -117,7 +87,6 @@ export default {
                 yandex: false,
                 windows: false
             }
-        }),
-        cssExtractPlugin
+        })
     ]
 }
