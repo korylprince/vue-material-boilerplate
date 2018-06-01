@@ -5,7 +5,7 @@
         </md-card-header>
 
         <md-card-content>
-            <p>Hello, {{name}}!</p>
+            <p>Hello, {{username}}!</p>
             <p v-if="thing">Thing: {{thing}}</p>
         </md-card-content>
 
@@ -27,10 +27,12 @@
 
 <script>
 import {mapState, mapGetters} from "vuex"
+import AuthorizedMixin from "./authorized-mixin.js"
 export default {
     name: "app-content",
+    mixins: [AuthorizedMixin],
     computed: {
-        ...mapState(["name", "thing"]),
+        ...mapState(["username", "thing"]),
         ...mapGetters(["is_loading"])
     },
     methods: {

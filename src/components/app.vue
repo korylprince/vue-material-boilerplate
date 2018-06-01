@@ -4,7 +4,7 @@
             <md-app-toolbar class="md-primary md-dense">
                 <router-link class="md-title" to="/">My App</router-link>
 
-                <span v-show="name">{{name}}</span>
+                <span v-show="username">{{username}}</span>
 
                 <div v-show="signed_in">
                     <md-menu md-direction="bottom-start">
@@ -24,13 +24,22 @@
             </md-app-content>
         </md-app>
 
-
         <md-dialog-alert
+            id="dialog-alert"
             :md-active="show_dialog"
             @update:mdActive="$store.commit('UPDATE_ERROR', null)"
             md-title="Error"
             :md-content="error"
+            :md-click-outside-to-close="false"
             ></md-dialog-alert>
+
+        <md-snackbar
+            :md-active="current_feedback != null"
+            @update:mdActive="$store.dispatch('clear_feedback')"
+            md-persistent
+            >
+            <span>{{current_feedback}}</span>
+        </md-snackbar>
     </div>
 </template>
 
@@ -39,11 +48,13 @@ import {mapState, mapGetters} from "vuex"
 export default {
     name: "my-app",
     computed: {
-        ...mapState({
-            "name": "name",
-            "error": "last_error"
-        }),
-        ...mapGetters(["signed_in", "show_dialog"])
+        ...mapState(["username", "title"]),
+        ...mapState({"error": "last_error"}),
+        ...mapGetters(["signed_in", "current_feedback", "dashboard_route"]),
+        ...mapGetters({"show_dialog_state": "show_dialog"}),
+        show_dialog() {
+            return this.$route.name !== "signin" && this.show_dialog_state
+        }
     },
     methods: {
         signout() {
@@ -55,10 +66,12 @@ export default {
 }
 </script>
 
-
 <style lang="stylus">
 #root, &>.md-app
     min-height: 100vh
+
+#dialog-alert
+    z-index: 999
 
 .md-toolbar .md-title
     flex: 1

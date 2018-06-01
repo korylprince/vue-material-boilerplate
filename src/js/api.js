@@ -9,8 +9,9 @@ const api = {
             window.setTimeout(() => {
                 if (Math.random() > 0.5) {
                     resolve({
-                        name: "Kory Prince",
-                        session_id: "3dca04ac361bab452e057b3e5d0d4fd5"
+                        data: {
+                            session_id: "3dca04ac361bab452e057b3e5d0d4fd5"
+                        }
                     })
                 } else {
                     reject({
@@ -30,7 +31,16 @@ const api = {
             window.setTimeout(() => {
                 if (Math.random() > 0.5) {
                     resolve({
-                        msg: Math.random()
+                        data: {
+                            msg: Math.random()
+                        }
+                    })
+                } else if (Math.random() > 0.5) {
+                    reject({
+                        response: {
+                            status: 401,
+                            statusText: "Unauthorized"
+                        }
                     })
                 } else {
                     reject({

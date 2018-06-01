@@ -12,6 +12,13 @@ Vue.use(VeeValidate)
 import router from "./js/router.js"
 import store from "./js/store.js"
 
+// if signed out, go to signin page
+store.watch((state, getters) => { return getters.signed_in }, signed_in => {
+    if (!signed_in) {
+        router.push({name: "signin"})
+    }
+})
+
 import MyApp from "./components/app.vue"
 
 var App = new (Vue.extend(MyApp))({

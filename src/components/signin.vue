@@ -42,6 +42,7 @@
 
 <script>
 import {mapState, mapGetters} from "vuex"
+import store from "../js/store.js"
 export default {
     name: "app-signin",
     computed: {
@@ -72,13 +73,15 @@ export default {
                 }
                 this.$router.push(next)
                 this.$store.commit("UPDATE_NEXT_ROUTE", null)
-            }).catch(() => {
-                // ignore other errors
             })
         }
+    },
+    beforeRouteEnter(to, from, next) {
+        if (store.getters.signed_in) {
+            next({name: "content"})
+            return
+        }
+        next()
     }
 }
 </script>
-
-<style lang="stylus" scoped>
-</style>
