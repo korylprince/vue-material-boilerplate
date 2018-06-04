@@ -48,7 +48,7 @@ import {mapState, mapGetters} from "vuex"
 export default {
     name: "my-app",
     computed: {
-        ...mapState(["username", "title"]),
+        ...mapState(["username"]),
         ...mapState({"error": "last_error"}),
         ...mapGetters(["signed_in", "current_feedback", "dashboard_route"]),
         ...mapGetters({"show_dialog_state": "show_dialog"}),
