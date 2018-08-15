@@ -11,7 +11,7 @@ module.exports = {
         sourceType: "module"
     },
     rules: {
-        "indent": ["error", 4],
+        "indent": ["error", 4, {"SwitchCase": 1}],
         "linebreak-style": ["error", "unix"],
         "quotes": ["error", "double"],
         "semi": ["error", "never"],
@@ -20,7 +20,7 @@ module.exports = {
         "space-before-function-paren": ["error", "never"],
         "object-curly-spacing": ["error", "never"],
         "arrow-parens": ["error", "as-needed"],
-        "arrow-body-style": ["error", "always"],
+        "arrow-body-style": ["error", "as-needed"],
         "promise/always-return": "off",
         "promise/no-return-wrap": ["error", {allowReject: true}]
     },
