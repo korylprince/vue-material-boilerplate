@@ -83,7 +83,9 @@ const store = new Vuex.Store({
             state._next_dispatch_payload = payload
         },
         ADD_FEEDBACK(state, msg) {
-            state._feedback.push(msg)
+            if (state._feedback[state._feedback.length - 1] !== msg) {
+                state._feedback.push(msg)
+            }
         },
         CLEAR_FEEDBACK(state) {
             // remove first element
