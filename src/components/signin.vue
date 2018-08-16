@@ -25,7 +25,7 @@
 
             <md-card-actions>
                 <md-button type="submit" class="md-primary"
-                    :disabled="is_loading || username == '' || password == ''">
+                    :disabled="is_loading || username === '' || password === ''">
                     <span v-show="!is_loading">Sign In</span>
                     <md-progress-spinner
                         class="app-spinner"
