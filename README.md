@@ -31,6 +31,12 @@ Building for production:
 
 `npm run build-prod`
 
+Use the `API_SERVER` environment variable to proxy `/api` to another server when using the dev-server:
+
+`API_SERVER="http://localhost:8080" npm run dev-server`
+
+This is useful for dealing with CORS issues.
+
 # License
 
 MIT (see included `LICENSE`)

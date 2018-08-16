@@ -6,7 +6,10 @@ var devConfig = {
     mode: "development",
     stats: {children: false},
     devServer: {
-        stats: "minimal"
+        stats: "minimal",
+        proxy: {
+            "/api": process.env.API_SERVER
+        }
     },
     devtool: "#cheap-module-inline-source-map"
 }
