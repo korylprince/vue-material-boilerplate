@@ -13,7 +13,7 @@
                         </md-button>
 
                         <md-menu-content>
-                            <md-menu-item @click="signout">Sign Out</md-menu-item>
+                            <md-menu-item @click="do_signout">Sign Out</md-menu-item>
                         </md-menu-content>
                     </md-menu>
                 </div>
@@ -27,7 +27,7 @@
         <md-dialog-alert
             id="dialog-alert"
             :md-active="show_dialog"
-            @update:mdActive="$store.commit('UPDATE_ERROR', null)"
+            @update:mdActive="UPDATE_ERROR(null)"
             md-title="Error"
             :md-content="error"
             :md-click-outside-to-close="false"
@@ -35,7 +35,7 @@
 
         <md-snackbar
             :md-active="current_feedback != null"
-            @update:mdActive="$store.dispatch('clear_feedback')"
+            @update:mdActive="clear_feedback"
             md-persistent
             >
             <span>{{current_feedback}}</span>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import {mapState, mapGetters} from "vuex"
+import {mapState, mapMutations, mapGetters, mapActions} from "vuex"
 export default {
     name: "my-app",
     computed: {
@@ -57,10 +57,11 @@ export default {
         }
     },
     methods: {
-        signout() {
-            return this.$store.dispatch("signout").then(() => {
-                this.$router.push({name: "signin"})
-            })
+        ...mapMutations(["UPDATE_ERROR"]),
+        ...mapActions(["clear_feedback", "signout"]),
+        async do_signout() {
+            await this.signout()
+            this.$router.push({name: "signin"})
         }
     }
 }

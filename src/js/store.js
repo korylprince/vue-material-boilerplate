@@ -100,36 +100,42 @@ const store = new Vuex.Store({
         }
     },
     actions: {
-        authenticate(context, {username, password}) {
+        async authenticate(context, {username, password}) {
             context.commit("START_LOADING")
 
-            var promise = api.authenticate(username, password)
-            promise.then(response => {
+            try {
+                var response = await api.authenticate(username, password)
+            } catch (err) {
                 context.commit("STOP_LOADING")
-                var session_id = response.data.session_id
-                context.commit("UPDATE_CREDENTIALS", {username, session_id})
-            }).then(() => {
-                context.dispatch("next_dispatch")
-            }).catch(error => {
-                context.commit("STOP_LOADING")
-                if (error.response !== null && error.response.status === 401) {
+                if (err.response !== null && err.response.status === 401) {
                     context.commit("UPDATE_ERROR", "Wrong username or password")
                     return
                 }
                 context.commit("UPDATE_ERROR", "Oops! Something bad happened. Contact your system administrator")
-                console.error({error: error})
-            })
+                console.error({error: err})
+                return
+            }
 
-            return promise
+            context.commit("STOP_LOADING")
+            context.commit("UPDATE_CREDENTIALS", {username, session_id: response.data.session_id})
         },
-        signout(context) {
+        async signout(context) {
             context.commit("SIGNOUT")
         },
-        next_dispatch(context) {
+        next_route(context, router) {
+            var next = context.state._next_route
+            if (next == null) {
+                next = {name: "content"}
+            }
+            router.push(next)
+            context.commit("UPDATE_NEXT_ROUTE", null)
+        },
+        async next_dispatch(context) {
             if (context.state._next_dispatch_action == null) { return }
-            return context.dispatch(context.state._next_dispatch_action, context.state._next_dispatch_payload).finally(() => {
-                context.commit("UPDATE_NEXT_DISPATCH", {action: null, payload: null})
-            })
+            try {
+                await context.dispatch(context.state._next_dispatch_action, context.state._next_dispatch_payload)
+            } catch (err) {}
+            context.commit("UPDATE_NEXT_DISPATCH", {action: null, payload: null})
         },
         clear_feedback(context) {
             context.commit("CLEAR_FEEDBACK")
@@ -137,26 +143,27 @@ const store = new Vuex.Store({
                 context.commit("CLEAR_FEEDBACK_DELAY")
             }, 500)
         },
-        get_thing(context) {
+        async get_thing(context) {
             context.commit("START_LOADING")
 
-            var promise = api.get_thing()
-            promise.then(response => {
+            try {
+                var response = await api.get_thing()
+            } catch (err) {
                 context.commit("STOP_LOADING")
-                var msg = response.data.msg
-                context.commit("UPDATE_THING", msg)
-                context.commit("ADD_FEEDBACK", "Thing loaded")
-            }).catch(error => {
-                context.commit("STOP_LOADING")
-                if (error.response !== null && error.response.status === 401) {
+                if (err.response !== null && err.response.status === 401) {
                     context.dispatch("signout")
                     context.commit("ADD_FEEDBACK", "Session expired. Please sign back in to load Thing")
                     context.commit("UPDATE_NEXT_DISPATCH", {action: "get_thing"})
                 } else {
                     context.commit("UPDATE_ERROR", "Oops! Something bad happened. Contact your system administrator")
-                    console.error({error: error})
+                    console.error({err: err})
                 }
-            })
+                return
+            }
+
+            context.commit("STOP_LOADING")
+            context.commit("UPDATE_THING", response.data.msg)
+            context.commit("ADD_FEEDBACK", "Thing loaded")
         }
     }
 })

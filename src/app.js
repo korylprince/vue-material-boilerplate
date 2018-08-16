@@ -12,10 +12,13 @@ Vue.use(VeeValidate)
 import router from "./js/router.js"
 import store from "./js/store.js"
 
-// if signed out, go to signin page
+// signin/signout actions
 store.watch((state, getters) => getters.signed_in, signed_in => {
     if (!signed_in) {
         router.push({name: "signin"})
+    } else {
+        store.dispatch("next_route", router)
+        store.dispatch("next_dispatch")
     }
 })
 

@@ -11,7 +11,7 @@
 
         <md-card-actions>
             <md-button class="md-accent">Cancel</md-button>
-            <md-button class="md-primary" :disabled="is_loading" @click="get_thing">
+            <md-button class="md-primary" :disabled="is_loading" @click="do_get_thing">
                 <span v-show="!is_loading">Get Thing</span>
                 <md-progress-spinner
                     class="app-spinner"
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {mapState, mapGetters} from "vuex"
+import {mapState, mapGetters, mapActions} from "vuex"
 import AuthorizedMixin from "./authorized-mixin.js"
 export default {
     name: "app-content",
@@ -36,9 +36,10 @@ export default {
         ...mapGetters(["is_loading"])
     },
     methods: {
-        get_thing() {
+        ...mapActions(["get_thing"]),
+        do_get_thing() {
             if (this.is_loading) { return }
-            this.$store.dispatch("get_thing")
+            this.get_thing()
         }
     }
 }

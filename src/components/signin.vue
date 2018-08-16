@@ -1,5 +1,5 @@
 <template>
-    <form novalidate @submit.prevent="authenticate(username, password)">
+    <form novalidate @submit.prevent="do_authenticate(username, password)">
         <md-card>
             <md-card-header>
                 <div class="md-title">Sign In</div>
@@ -24,7 +24,8 @@
             </md-card-content>
 
             <md-card-actions>
-                <md-button type="submit" class="md-primary" :disabled="is_loading">
+                <md-button type="submit" class="md-primary"
+                    :disabled="is_loading || username == '' || password == ''">
                     <span v-show="!is_loading">Sign In</span>
                     <md-progress-spinner
                         class="app-spinner"
@@ -41,7 +42,7 @@
 </template>
 
 <script>
-import {mapState, mapGetters} from "vuex"
+import {mapState, mapMutations, mapGetters, mapActions} from "vuex"
 import store from "../js/store.js"
 export default {
     name: "app-signin",
@@ -51,29 +52,23 @@ export default {
     },
     data() {
         return {
-            username: null,
-            password: null
+            username: "",
+            password: ""
         }
     },
     methods: {
-        authenticate(username, password) {
+        ...mapMutations(["UPDATE_ERROR"]),
+        ...mapActions(["authenticate"]),
+        async do_authenticate(username, password) {
             if (this.is_loading) { return }
 
-            this.$validator.validateAll().catch(() => {
-                this.$store.commit("UPDATE_ERROR", "Form validation error")
-            }).then(valid => {
-                if (valid) {
-                    return this.$store.dispatch("authenticate", {username, password})
-                }
-                return Promise.reject()
-            }).then(() => {
-                var next = this.$store.getters.next_route
-                if (next == null) {
-                    next = {name: "content"}
-                }
-                this.$router.push(next)
-                this.$store.commit("UPDATE_NEXT_ROUTE", null)
-            })
+            try {
+                if (!(await this.$validator.validateAll())) { return }
+            } catch (err) {
+                this.UPDATE_ERROR("Form validation error")
+            }
+
+            this.authenticate({username, password})
         }
     },
     beforeRouteEnter(to, from, next) {
