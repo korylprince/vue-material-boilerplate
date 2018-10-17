@@ -13,7 +13,7 @@ const devConfig = {
             "/api": process.env.API_SERVER,
         },
     },
-    devtool: "#cheap-module-inline-source-map",
+    devtool: "inline-source-map",
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
     ],
