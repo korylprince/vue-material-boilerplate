@@ -48,28 +48,32 @@ export default {
     name: "app-signin",
     computed: {
         ...mapState({"error": "last_error"}),
-        ...mapGetters(["is_loading"])
+        ...mapGetters(["is_loading"]),
     },
     data() {
         return {
             username: "",
-            password: ""
+            password: "",
         }
     },
     methods: {
         ...mapMutations(["UPDATE_ERROR"]),
         ...mapActions(["authenticate"]),
         async do_authenticate(username, password) {
-            if (this.is_loading) { return }
+            if (this.is_loading) {
+                return
+            }
 
             try {
-                if (!(await this.$validator.validateAll())) { return }
+                if (!(await this.$validator.validateAll())) {
+                    return
+                }
             } catch (err) {
                 this.UPDATE_ERROR("Form validation error")
             }
 
             this.authenticate({username, password})
-        }
+        },
     },
     beforeRouteEnter(to, from, next) {
         if (store.getters.signed_in) {
@@ -77,6 +81,6 @@ export default {
             return
         }
         next()
-    }
+    },
 }
 </script>

@@ -54,7 +54,7 @@ export default {
         ...mapGetters({"show_dialog_state": "show_dialog"}),
         show_dialog() {
             return this.$route.name !== "signin" && this.show_dialog_state
-        }
+        },
     },
     methods: {
         ...mapMutations(["UPDATE_ERROR"]),
@@ -62,8 +62,8 @@ export default {
         async do_signout() {
             await this.signout()
             this.$router.push({name: "signin"})
-        }
-    }
+        },
+    },
 }
 </script>
 

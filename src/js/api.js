@@ -1,24 +1,24 @@
-/*global API_BASE*/
+/* global API_BASE*/
 
 import store from "./store.js"
 
 const api = {
     authenticate(username, password) {
         // API mock
-        var promise = new Promise(function(resolve, reject) {
+        const promise = new Promise(function(resolve, reject) {
             window.setTimeout(() => {
                 if (Math.random() > 0.5) {
                     resolve({
                         data: {
-                            session_id: "3dca04ac361bab452e057b3e5d0d4fd5"
-                        }
+                            session_id: "3dca04ac361bab452e057b3e5d0d4fd5",
+                        },
                     })
                 } else {
                     reject({
                         response: {
                             status: 401,
-                            statusText: "Unauthorized"
-                        }
+                            statusText: "Unauthorized",
+                        },
                     })
                 }
             }, 1000)
@@ -27,27 +27,27 @@ const api = {
     },
     get_thing() {
         // API mock
-        var promise = new Promise(function(resolve, reject) {
+        const promise = new Promise(function(resolve, reject) {
             window.setTimeout(() => {
                 if (Math.random() > 0.5) {
                     resolve({
                         data: {
-                            msg: Math.random()
-                        }
+                            msg: Math.random(),
+                        },
                     })
                 } else if (Math.random() > 0.5) {
                     reject({
                         response: {
                             status: 401,
-                            statusText: "Unauthorized"
-                        }
+                            statusText: "Unauthorized",
+                        },
                     })
                 } else {
                     reject({
                         response: {
                             status: 500,
-                            statusText: "Server Error"
-                        }
+                            statusText: "Server Error",
+                        },
                     })
                 }
             }, 1000)
@@ -56,7 +56,7 @@ const api = {
     },
     do_authenticated_thing(data) {
         return store.getters.$http().post(API_BASE + "/data", data)
-    }
+    },
 }
 
 export default api

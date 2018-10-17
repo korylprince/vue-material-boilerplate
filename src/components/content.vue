@@ -33,15 +33,17 @@ export default {
     mixins: [AuthorizedMixin],
     computed: {
         ...mapState(["username", "thing"]),
-        ...mapGetters(["is_loading"])
+        ...mapGetters(["is_loading"]),
     },
     methods: {
         ...mapActions(["get_thing"]),
         do_get_thing() {
-            if (this.is_loading) { return }
+            if (this.is_loading) {
+                return
+            }
             this.get_thing()
-        }
-    }
+        },
+    },
 }
 </script>
 

@@ -19,7 +19,7 @@ const store = new Vuex.Store({
         _next_dispatch_payload: null,
         _feedback: [],
         _feedback_delay: false,
-        thing: null
+        thing: null,
     },
     getters: {
         is_loading(state) {
@@ -33,7 +33,7 @@ const store = new Vuex.Store({
                 name: state._next_route.name,
                 path: state._next_route.path,
                 params: state._next_route.params,
-                query: state._next_route.query
+                query: state._next_route.query,
             }
         },
         signed_in(state) {
@@ -44,13 +44,15 @@ const store = new Vuex.Store({
         },
         $http(state) {
             return axios.create({
-                headers: {Authorization: "Session id=\"" + state.session_id + "\""}
+                headers: {Authorization: "Session id=\"" + state.session_id + "\""},
             })
         },
         current_feedback(state) {
-            if (state._feedback_delay || state._feedback.length === 0) { return null }
+            if (state._feedback_delay || state._feedback.length === 0) {
+                return null
+            }
             return state._feedback[0]
-        }
+        },
     },
     mutations: {
         UPDATE_ERROR(state, error) {
@@ -97,14 +99,16 @@ const store = new Vuex.Store({
         },
         UPDATE_THING(state, thing) {
             state.thing = thing
-        }
+        },
     },
     actions: {
         async authenticate(context, {username, password}) {
             context.commit("START_LOADING")
 
             try {
-                var response = await api.authenticate(username, password)
+                const response = await api.authenticate(username, password)
+                context.commit("STOP_LOADING")
+                context.commit("UPDATE_CREDENTIALS", {username, session_id: response.data.session_id})
             } catch (err) {
                 context.commit("STOP_LOADING")
                 if (err.response !== null && err.response.status === 401) {
@@ -115,15 +119,12 @@ const store = new Vuex.Store({
                 console.error({error: err})
                 return
             }
-
-            context.commit("STOP_LOADING")
-            context.commit("UPDATE_CREDENTIALS", {username, session_id: response.data.session_id})
         },
         async signout(context) {
             context.commit("SIGNOUT")
         },
         next_route(context, router) {
-            var next = context.state._next_route
+            let next = context.state._next_route
             if (next == null) {
                 next = {name: "content"}
             }
@@ -131,10 +132,10 @@ const store = new Vuex.Store({
             context.commit("UPDATE_NEXT_ROUTE", null)
         },
         async next_dispatch(context) {
-            if (context.state._next_dispatch_action == null) { return }
-            try {
-                await context.dispatch(context.state._next_dispatch_action, context.state._next_dispatch_payload)
-            } catch (err) {}
+            if (context.state._next_dispatch_action == null) {
+                return
+            }
+            await context.dispatch(context.state._next_dispatch_action, context.state._next_dispatch_payload)
             context.commit("UPDATE_NEXT_DISPATCH", {action: null, payload: null})
         },
         clear_feedback(context) {
@@ -147,7 +148,10 @@ const store = new Vuex.Store({
             context.commit("START_LOADING")
 
             try {
-                var response = await api.get_thing()
+                const response = await api.get_thing()
+                context.commit("STOP_LOADING")
+                context.commit("UPDATE_THING", response.data.msg)
+                context.commit("ADD_FEEDBACK", "Thing loaded")
             } catch (err) {
                 context.commit("STOP_LOADING")
                 if (err.response !== null && err.response.status === 401) {
@@ -160,12 +164,8 @@ const store = new Vuex.Store({
                 }
                 return
             }
-
-            context.commit("STOP_LOADING")
-            context.commit("UPDATE_THING", response.data.msg)
-            context.commit("ADD_FEEDBACK", "Thing loaded")
-        }
-    }
+        },
+    },
 })
 
 export default store

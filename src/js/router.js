@@ -10,8 +10,8 @@ const router = new VueRouter({
     routes: [
         {name: "signin", path: "/signin", component: AppSignin},
         {name: "content", path: "/", component: AppContent},
-        {path: "*", redirect: {name: "content"}}
-    ]
+        {path: "*", redirect: {name: "content"}},
+    ],
 })
 
 export default router

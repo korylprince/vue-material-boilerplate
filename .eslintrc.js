@@ -1,31 +1,36 @@
 module.exports = {
+    parser: "babel-eslint",
     env: {
         browser: true,
-        es6: true
+        es6: true,
+        node: true,
     },
     extends: [
-        "plugin:vue-libs/recommended",
-        "plugin:promise/recommended"
+        "eslint:recommended",
+        "google",
     ],
     parserOptions: {
-        sourceType: "module"
+        "sourceType": "module",
     },
     rules: {
+        "arrow-body-style": ["error", "as-needed"],
+        "arrow-parens": ["error", "as-needed"],
+        "camelcase": "off",
         "indent": ["error", 4, {"SwitchCase": 1}],
         "linebreak-style": ["error", "unix"],
+        "max-len": "off",
+        "new-cap": "off",
+        "no-console": ["error", {allow: ["error"]}],
+        "object-curly-spacing": ["error", "never"],
+        "promise/always-return": "off",
+        "promise/no-return-wrap": ["error", {allowReject: true}],
         "quotes": ["error", "double"],
         "semi": ["error", "never"],
-        "no-console": ["error", {allow: ["error"]}],
-        "camelcase": 0,
         "space-before-function-paren": ["error", "never"],
-        "object-curly-spacing": ["error", "never"],
-        "arrow-parens": ["error", "as-needed"],
-        "arrow-body-style": ["error", "as-needed"],
-        "promise/always-return": "off",
-        "promise/no-return-wrap": ["error", {allowReject: true}]
     },
     plugins: [
         "html",
-        "promise"
-    ]
+        "promise",
+        "vue",
+    ],
 }

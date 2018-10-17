@@ -24,10 +24,10 @@ store.watch((state, getters) => getters.signed_in, signed_in => {
 
 import MyApp from "./components/app.vue"
 
-var App = new (Vue.extend(MyApp))({
+const App = new (Vue.extend(MyApp))({
     el: "#root",
     router,
-    store
+    store,
 })
 
 export default App
