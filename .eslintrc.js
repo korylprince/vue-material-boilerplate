@@ -1,22 +1,24 @@
 module.exports = {
-    parser: "babel-eslint",
     env: {
         browser: true,
         es6: true,
         node: true,
     },
     extends: [
+        "plugin:vue/essential",
         "eslint:recommended",
         "google",
     ],
     parserOptions: {
-        "sourceType": "module",
+        parser: "babel-eslint",
+        sourceType: "module",
     },
     rules: {
         "arrow-body-style": ["error", "as-needed"],
         "arrow-parens": ["error", "as-needed"],
         "camelcase": "off",
         "indent": ["error", 4, {"SwitchCase": 1}],
+        "require-jsdoc": "off",
         "linebreak-style": ["error", "unix"],
         "max-len": "off",
         "new-cap": "off",
