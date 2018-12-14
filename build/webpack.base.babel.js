@@ -3,7 +3,7 @@ import webpack from "webpack"
 import VueLoaderPlugin from "vue-loader/lib/plugin"
 import MiniCssExtractPlugin from "mini-css-extract-plugin"
 import HtmlWebpackPlugin from "html-webpack-plugin"
-import FaviconsWebpackPlugin from "favicons-webpack-plugin"
+import WebappWebpackPlugin from "webapp-webpack-plugin"
 import autoprefixer from "autoprefixer"
 
 const root = path.resolve(__dirname, "../")
@@ -85,21 +85,9 @@ export default {
         new HtmlWebpackPlugin({
             template: path.resolve(root, "src/index.html"),
         }),
-        new FaviconsWebpackPlugin({
+        new WebappWebpackPlugin({
             logo: path.resolve(root, "src/img/favicon.png"),
             prefix: "icons/",
-            icons: {
-                android: true,
-                appleIcon: true,
-                appleStartup: false,
-                coast: false,
-                favicons: true,
-                firefox: false,
-                opengraph: false,
-                twitter: false,
-                yandex: false,
-                windows: false,
-            },
         }),
     ],
 }
