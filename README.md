@@ -4,13 +4,13 @@ This is an opinionated template for a [Vue](https://vuejs.org/) app. It's meant 
 
 # Features
 
-* Material Design app components: [vue-material](https://vuematerial.io/)
+* Material Design app components: [vuetify](https://vuetifyjs.com/)
 * router: [vue-router](https://router.vuejs.org/en/)
 * store: [vuex](https://vuex.vuejs.org/en/)
 * validation: [vee-validate](http://vee-validate.logaretm.com/)
 * HTTP calls: [axios](https://github.com/axios/axios)
 * pre-built authentication and sign-in page; just add an API endpoint
-* Webpack 2/Babel dev/prod build setup
+* Webpack/Babel dev/prod build setup
 * Linting with ESLint
 
 # Get Started

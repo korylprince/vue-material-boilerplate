@@ -1,46 +1,42 @@
 <template>
-    <div id="root" class="page-container">
-        <md-app>
-            <md-app-toolbar class="md-primary md-dense">
-                <router-link class="md-title" to="/">My App</router-link>
+    <v-app>
+        <v-toolbar color="primary" dark dense app>
+            <router-link to="/" tag="v-toolbar-title" class="toolbar-title">My App</router-link>
+            <v-spacer></v-spacer>
+            <span v-show="username">{{username}}</span>
+            <v-menu offset-y v-show="signed_in">
+                <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
+                <v-list>
+                    <v-list-tile @click="do_signout">
+                        <v-list-tile-title>Sign Out</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+        </v-toolbar>
 
-                <span v-show="username">{{username}}</span>
+        <v-content>
+            <v-container fluid :pa-0="$vuetify.breakpoint.xsOnly">
+                <v-layout justify-center>
+                    <router-view></router-view>
+                </v-layout>
+            </v-container>
+        </v-content>
 
-                <div v-show="signed_in">
-                    <md-menu md-direction="bottom-start">
-                        <md-button class="md-icon-button" md-menu-trigger>
-                            <md-icon>more_vert</md-icon>
-                        </md-button>
+        <v-dialog :value="show_dialog" persistent max-width="480" :fullscreen="$vuetify.breakpoint.xsOnly">
+            <v-card>
+                <v-card-title class="headline">Error</v-card-title>
+                <v-card-text>{{error}}</v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" flat @click="UPDATE_ERROR(null)">OK</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
 
-                        <md-menu-content>
-                            <md-menu-item @click="do_signout">Sign Out</md-menu-item>
-                        </md-menu-content>
-                    </md-menu>
-                </div>
-            </md-app-toolbar>
-
-            <md-app-content id="content">
-                <router-view></router-view>
-            </md-app-content>
-        </md-app>
-
-        <md-dialog-alert
-            id="dialog-alert"
-            :md-active="show_dialog"
-            @update:mdActive="UPDATE_ERROR(null)"
-            md-title="Error"
-            :md-content="error"
-            :md-click-outside-to-close="false"
-            ></md-dialog-alert>
-
-        <md-snackbar
-            :md-active="current_feedback != null"
-            @update:mdActive="clear_feedback"
-            md-persistent
-            >
-            <span>{{current_feedback}}</span>
-        </md-snackbar>
-    </div>
+        <v-snackbar :value="current_feedback != null" @input="clear_feedback">
+            {{ current_feedback }}
+        </v-snackbar>
+    </v-app>
 </template>
 
 <script>
@@ -50,7 +46,7 @@ export default {
     computed: {
         ...mapState(["username"]),
         ...mapState({"error": "last_error"}),
-        ...mapGetters(["signed_in", "current_feedback", "dashboard_route"]),
+        ...mapGetters(["signed_in", "current_feedback"]),
         ...mapGetters({"show_dialog_state": "show_dialog"}),
         show_dialog() {
             return this.$route.name !== "signin" && this.show_dialog_state
@@ -67,25 +63,11 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-#root, &>.md-app
-    min-height: 100vh
-
-#dialog-alert
-    z-index: 999
-
-.md-toolbar .md-title
-    flex: 1
+<style lang="stylus" scoped>
+.toolbar-title
+    color: inherit
+    cursor: pointer
 
     &:hover
-        text-decoration: none
-        font-weight: 500
-
-#content
-    background-color: inherit
-
-    > div, form
-        max-width: 600px
-        margin-left: auto
-        margin-right: auto
+        font-weight: bold
 </style>

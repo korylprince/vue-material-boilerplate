@@ -1,28 +1,22 @@
 <template>
-    <md-card>
-        <md-card-header>
-            <div class="md-title">Hello!</div>
-        </md-card-header>
+    <v-card width="100%" max-width="600px">
+        <v-card-title primary-title>
+            <div class="headline">Hello!</div>
+        </v-card-title>
 
-        <md-card-content>
+        <v-card-text>
             <p>Hello, {{username}}!</p>
             <p v-if="thing">Thing: {{thing}}</p>
-        </md-card-content>
+        </v-card-text>
 
-        <md-card-actions>
-            <md-button class="md-accent">Cancel</md-button>
-            <md-button class="md-primary" :disabled="is_loading" @click="do_get_thing">
-                <span v-show="!is_loading">Get Thing</span>
-                <md-progress-spinner
-                    class="app-spinner"
-                    v-if="is_loading"
-                    md-mode="indeterminate"
-                    :md-diameter="20"
-                    :md-stroke="2"
-                    ></md-progress-spinner>
-            </md-button>
-        </md-card-actions>
-    </md-card>
+        <v-spacer></v-spacer>
+
+        <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="accent" flat>Cancel</v-btn>
+            <v-btn color="primary" flat :loading="is_loading" @click="do_get_thing">Get Thing</v-btn>
+        </v-card-actions>
+    </v-card>
 </template>
 
 <script>
@@ -46,6 +40,3 @@ export default {
     },
 }
 </script>
-
-<style lang="stylus" scoped>
-</style>

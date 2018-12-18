@@ -1,12 +1,18 @@
-import "vue-material/dist/vue-material.css"
-import "./style/theme.scss"
-import "./style/app.styl"
+import "vuetify/src/stylus/main.styl"
 
 import Vue from "vue"
-import VueMaterial from "vue-material"
+import Vuetify from "vuetify"
 import VeeValidate from "vee-validate"
 
-Vue.use(VueMaterial)
+import colors from "vuetify/es5/util/colors.js"
+
+Vue.use(Vuetify, {
+    theme: {
+        primary: colors.blue.base,
+        accent: colors.red.base,
+        secondary: colors.blue.accent4,
+    },
+})
 Vue.use(VeeValidate)
 
 import router from "./js/router.js"
