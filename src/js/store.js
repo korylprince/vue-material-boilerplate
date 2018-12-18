@@ -124,7 +124,7 @@ const store = new Vuex.Store({
             context.commit("SIGNOUT")
         },
         next_route(context, router) {
-            let next = context.state._next_route
+            let next = context.getters.next_route
             if (next == null) {
                 next = {name: "content"}
             }
