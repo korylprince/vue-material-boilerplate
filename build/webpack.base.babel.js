@@ -1,7 +1,6 @@
 import path from "path"
 import webpack from "webpack"
 import VueLoaderPlugin from "vue-loader/lib/plugin"
-import MiniCssExtractPlugin from "mini-css-extract-plugin"
 import HtmlWebpackPlugin from "html-webpack-plugin"
 import WebappWebpackPlugin from "webapp-webpack-plugin"
 import autoprefixer from "autoprefixer"
@@ -22,7 +21,7 @@ const postcssLoader = {
     },
 }
 
-export default {
+const baseConfig = {
     entry: {
         app: path.resolve(root, "src/app.js"),
     },
@@ -41,32 +40,6 @@ export default {
                 loader: "babel-loader",
                 exclude: /node_modules/,
             },
-            {
-                test: /\.css$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {loader: "css-loader", options: {importLoaders: 1, sourceMap: true}},
-                    postcssLoader,
-                ],
-            },
-            {
-                test: /\.scss$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
-                    postcssLoader,
-                    {loader: "sass-loader", options: {sourceMap: true}},
-                ],
-            },
-            {
-                test: /\.styl(us)?$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
-                    postcssLoader,
-                    {loader: "stylus-loader", options: {sourceMap: true}},
-                ],
-            },
         ],
     },
     resolve: {
@@ -79,9 +52,6 @@ export default {
             API_BASE: JSON.stringify(API_BASE),
         }),
         new VueLoaderPlugin(),
-        new MiniCssExtractPlugin({
-            filename: "style/[name].css",
-        }),
         new HtmlWebpackPlugin({
             template: path.resolve(root, "src/index.html"),
         }),
@@ -91,3 +61,5 @@ export default {
         }),
     ],
 }
+
+export {baseConfig, postcssLoader}
