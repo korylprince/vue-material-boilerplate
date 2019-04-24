@@ -1,11 +1,8 @@
-import path from "path"
 import CleanWebpackPlugin from "clean-webpack-plugin"
 import UglifyJsPlugin from "uglifyjs-webpack-plugin"
 import MiniCssExtractPlugin from "mini-css-extract-plugin"
 import OptimizeCssAssetsPlugin from "optimize-css-assets-webpack-plugin"
 import merge from "webpack-merge"
-
-const root = path.resolve(__dirname, "../")
 
 import {baseConfig, postcssLoader} from "./webpack.base.babel.js"
 
@@ -13,7 +10,7 @@ const prodConfig = {
     mode: "production",
     optimization: {
         minimizer: [
-            new CleanWebpackPlugin(["dist"], {root}),
+            new CleanWebpackPlugin(),
             new UglifyJsPlugin({
                 cache: true,
                 parallel: true,
