@@ -1,4 +1,4 @@
-/* global API_BASE*/
+/* global API_BASE */
 
 import store from "./store.js"
 
@@ -55,7 +55,7 @@ const api = {
         return promise
     },
     do_authenticated_thing(data) {
-        return store.getters.$http().post(API_BASE + "/data", data)
+        return store.getters.$http().post(`${API_BASE}/data`, data)
     },
 }
 
