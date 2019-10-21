@@ -8,7 +8,7 @@ import autoprefixer from "autoprefixer"
 
 const root = path.resolve(__dirname, "../")
 
-const API_BASE = process.env.API_BASE ? process.env.API_BASE : "http://localhost/api/1.0"
+const API_BASE = process.env.API_BASE ? process.env.API_BASE : "/api/1.0"
 
 const postcssLoader = {
     loader: "postcss-loader",
