@@ -4,9 +4,9 @@
             <router-link to="/" tag="v-toolbar-title" class="toolbar-title">My App</router-link>
             <v-spacer></v-spacer>
             <span v-show="username">{{username}}</span>
-            <v-menu offset-y v-show="signed_in">
+           <v-menu offset-y v-show="signed_in">
                 <template v-slot:activator="{on}">
-                    <v-btn icon v-on="on"><v-icon>more_vert</v-icon></v-btn>
+                    <v-btn icon v-on="on" v-show="signed_in"><v-icon>more_vert</v-icon></v-btn>
                 </template>
                 <v-list>
                     <v-list-item @click="do_signout">
