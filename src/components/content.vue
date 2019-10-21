@@ -13,8 +13,8 @@
 
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="accent" flat>Cancel</v-btn>
-            <v-btn color="primary" flat :loading="is_loading" @click="do_get_thing">Get Thing</v-btn>
+            <v-btn color="accent" text>Cancel</v-btn>
+            <v-btn color="primary" text :loading="is_loading" @click="do_get_thing">Get Thing</v-btn>
         </v-card-actions>
     </v-card>
 </template>

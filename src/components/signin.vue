@@ -6,26 +6,26 @@
 
         <form novalidate @submit.prevent="do_authenticate(username, password)">
             <v-card-text>
+                <validation-provider name="username" rules="required" v-slot="{errors}">
                 <v-text-field
                     label="Username"
                     v-model="username"
-                    v-validate="'required'"
-                    :error-messages="errors.collect('username')"
-                    data-vv-name="username"
+                    :error-messages="errors"
                     required>
                 </v-text-field>
+                </validation-provider>
 
+                <validation-provider name="password" rules="required" v-slot="{errors}">
                 <v-text-field
                     :type="show_password ? 'text' : 'password'"
                     :append-icon="show_password ? 'visibility_off' : 'visibility'"
                     @click:append="show_password = !show_password"
                     label="Password"
                     v-model="password"
-                    v-validate="'required'"
-                    :error-messages="errors.collect('password')"
-                    data-vv-name="password"
+                    :error-messages="errors"
                     required>
                 </v-text-field>
+                </validation-provider>
 
                 <span class="error--text" v-if="error">{{error}}</span>
             </v-card-text>
@@ -34,7 +34,7 @@
                 <v-spacer></v-spacer>
                 <v-btn type="submit"
                        color="primary"
-                       flat
+                       text
                        :loading="is_loading"
                        :disabled="username === '' || password === ''"
                        >Sign In</v-btn>

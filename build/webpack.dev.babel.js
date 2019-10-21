@@ -1,11 +1,11 @@
 import webpack from "webpack"
 import merge from "webpack-merge"
+import fibers from "fibers"
 
 import {baseConfig, postcssLoader} from "./webpack.base.babel.js"
 
 const devConfig = {
     mode: "development",
-    stats: {children: false},
     devServer: {
         hot: true,
         stats: "minimal",
@@ -25,21 +25,12 @@ const devConfig = {
                 ],
             },
             {
-                test: /\.scss$/,
+                test: /\.s[ac]ss$/,
                 use: [
                     {loader: "style-loader"},
                     {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
                     postcssLoader,
-                    {loader: "sass-loader", options: {sourceMap: true}},
-                ],
-            },
-            {
-                test: /\.styl(us)?$/,
-                use: [
-                    {loader: "style-loader"},
-                    {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
-                    postcssLoader,
-                    {loader: "stylus-loader", options: {sourceMap: true}},
+                    {loader: "sass-loader", options: {sourceMap: true, sassOptions: {indentedSyntax: true, fibers}}},
                 ],
             },
         ],

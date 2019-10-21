@@ -1,18 +1,20 @@
 <template>
     <v-app>
-        <v-toolbar color="primary" dark dense app>
+        <v-app-bar color="primary" dark dense app>
             <router-link to="/" tag="v-toolbar-title" class="toolbar-title">My App</router-link>
             <v-spacer></v-spacer>
             <span v-show="username">{{username}}</span>
             <v-menu offset-y v-show="signed_in">
-                <v-btn slot="activator" icon><v-icon>more_vert</v-icon></v-btn>
+                <template v-slot:activator="{on}">
+                    <v-btn icon v-on="on"><v-icon>more_vert</v-icon></v-btn>
+                </template>
                 <v-list>
-                    <v-list-tile @click="do_signout">
-                        <v-list-tile-title>Sign Out</v-list-tile-title>
-                    </v-list-tile>
+                    <v-list-item @click="do_signout">
+                        <v-list-item-title>Sign Out</v-list-item-title>
+                    </v-list-item>
                 </v-list>
             </v-menu>
-        </v-toolbar>
+        </v-app-bar>
 
         <v-content>
             <v-container fluid :pa-0="$vuetify.breakpoint.xsOnly">
@@ -28,7 +30,7 @@
                 <v-card-text>{{error}}</v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" flat @click="UPDATE_ERROR(null)">OK</v-btn>
+                    <v-btn color="primary" text @click="UPDATE_ERROR(null)">OK</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -63,7 +65,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="sass" scoped>
 .toolbar-title
     color: inherit
     cursor: pointer

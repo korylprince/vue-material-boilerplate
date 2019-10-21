@@ -1,8 +1,9 @@
 import path from "path"
 import webpack from "webpack"
 import VueLoaderPlugin from "vue-loader/lib/plugin"
+import VuetifyLoader from "vuetify-loader/lib/plugin"
 import HtmlWebpackPlugin from "html-webpack-plugin"
-import WebappWebpackPlugin from "webapp-webpack-plugin"
+import FaviconsWebpackPlugin from "favicons-webpack-plugin"
 import autoprefixer from "autoprefixer"
 
 const root = path.resolve(__dirname, "../")
@@ -14,9 +15,7 @@ const postcssLoader = {
     options: {
         sourceMap: true,
         plugins: [
-            autoprefixer({
-                browsers: ["last 2 versions"],
-            }),
+            autoprefixer(),
         ],
     },
 }
@@ -28,6 +27,9 @@ const baseConfig = {
     output: {
         path: path.resolve(root, "dist/"),
         filename: "js/[name].js",
+    },
+    stats: {
+        children: false,
     },
     module: {
         rules: [
@@ -52,10 +54,11 @@ const baseConfig = {
             API_BASE: JSON.stringify(API_BASE),
         }),
         new VueLoaderPlugin(),
+        new VuetifyLoader(),
         new HtmlWebpackPlugin({
             template: path.resolve(root, "src/index.html"),
         }),
-        new WebappWebpackPlugin({
+        new FaviconsWebpackPlugin({
             logo: path.resolve(root, "src/img/favicon.png"),
             prefix: "icons/",
         }),

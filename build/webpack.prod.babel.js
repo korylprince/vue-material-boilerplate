@@ -1,8 +1,9 @@
-import CleanWebpackPlugin from "clean-webpack-plugin"
-import UglifyJsPlugin from "uglifyjs-webpack-plugin"
+import {CleanWebpackPlugin} from "clean-webpack-plugin"
+import TerserWebpackPlugin from "terser-webpack-plugin"
 import MiniCssExtractPlugin from "mini-css-extract-plugin"
 import OptimizeCssAssetsPlugin from "optimize-css-assets-webpack-plugin"
 import merge from "webpack-merge"
+import fibers from "fibers"
 
 import {baseConfig, postcssLoader} from "./webpack.base.babel.js"
 
@@ -11,13 +12,13 @@ const prodConfig = {
     optimization: {
         minimizer: [
             new CleanWebpackPlugin(),
-            new UglifyJsPlugin({
+            new TerserWebpackPlugin({
                 cache: true,
                 parallel: true,
                 sourceMap: false,
             }),
             new OptimizeCssAssetsPlugin({
-                assetNameRegExp: /\.(css|styl(us)?|s[ac]ss)$/g,
+                assetNameRegExp: /\.(css|s[ac]ss)$/g,
             }),
         ],
     },
@@ -32,21 +33,13 @@ const prodConfig = {
                 ],
             },
             {
-                test: /\.scss$/,
+                test: /\.s[ac]ss$/,
                 use: [
                     MiniCssExtractPlugin.loader,
                     {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
                     postcssLoader,
-                    {loader: "sass-loader", options: {sourceMap: true}},
-                ],
-            },
-            {
-                test: /\.styl(us)?$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {loader: "css-loader", options: {importLoaders: 2, sourceMap: true}},
-                    postcssLoader,
-                    {loader: "stylus-loader", options: {sourceMap: true}},
+                    {loader: "sass-loader", options: {sourceMap: true, sassOptions: {indentedSyntax: true, fibers}}},
+
                 ],
             },
         ],
