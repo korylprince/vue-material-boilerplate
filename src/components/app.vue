@@ -1,7 +1,9 @@
 <template>
     <v-app>
         <v-app-bar color="primary" dark dense app>
-            <router-link to="/" tag="v-toolbar-title" class="toolbar-title">My App</router-link>
+            <router-link to="/" class="toolbar-title">
+                <v-toolbar-title>My App</v-toolbar-title>
+            </router-link>
             <v-spacer></v-spacer>
             <span v-show="username">{{username}}</span>
            <v-menu offset-y v-show="signed_in">
@@ -69,6 +71,7 @@ export default {
 .toolbar-title
     color: inherit
     cursor: pointer
+    text-decoration: none
 
     &:hover
         font-weight: bold
