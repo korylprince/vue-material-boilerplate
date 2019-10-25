@@ -11,7 +11,7 @@
                     <v-btn icon v-on="on" v-show="signed_in"><v-icon>more_vert</v-icon></v-btn>
                 </template>
                 <v-list>
-                    <v-list-item @click="do_signout">
+                    <v-list-item @click="signout">
                         <v-list-item-title>Sign Out</v-list-item-title>
                     </v-list-item>
                 </v-list>
@@ -64,10 +64,6 @@ export default {
     methods: {
         ...mapMutations(["UPDATE_ERROR"]),
         ...mapActions(["clear_feedback", "signout"]),
-        async do_signout() {
-            await this.signout()
-            this.$router.push({name: "signin"})
-        },
     },
 }
 </script>
