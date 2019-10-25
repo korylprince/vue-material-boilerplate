@@ -39,6 +39,11 @@
 
         <v-snackbar :value="current_feedback != null" @input="clear_feedback">
             {{ current_feedback }}
+            <v-btn color="primary"
+                text
+                @click="clear_feedback">
+                Close
+            </v-btn>
         </v-snackbar>
     </v-app>
 </template>
