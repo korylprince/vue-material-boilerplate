@@ -10,7 +10,11 @@ const devConfig = {
         hot: true,
         stats: "minimal",
         proxy: {
-            "/api": process.env.API_SERVER,
+            "/api": {
+                target: process.env.API_SERVER,
+                secure: false,
+                changeOrigin: true,
+            },
         },
     },
     devtool: "inline-source-map",
