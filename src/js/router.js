@@ -4,13 +4,13 @@ import VueRouter from "vue-router"
 Vue.use(VueRouter)
 
 import AppSignin from "../components/signin.vue"
-import AppContent from "../components/content.vue"
+import AppDashboard from "../components/dashboard.vue"
 
 const router = new VueRouter({
     routes: [
         {name: "signin", path: "/signin", component: AppSignin},
-        {name: "content", path: "/", component: AppContent},
-        {path: "*", redirect: {name: "content"}},
+        {name: "dashboard", path: "/", component: AppDashboard},
+        {path: "*", redirect: {name: "dashboard"}},
     ],
 })
 

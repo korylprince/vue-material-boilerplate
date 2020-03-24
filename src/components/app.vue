@@ -5,7 +5,7 @@
                 <v-toolbar-title>My App</v-toolbar-title>
             </router-link>
             <v-spacer></v-spacer>
-            <span v-show="username">{{username}}</span>
+            <span v-show="display_name">{{display_name}}</span>
            <v-menu offset-y v-show="signed_in">
                 <template v-slot:activator="{on}">
                     <v-btn icon v-on="on" v-show="signed_in"><v-icon>more_vert</v-icon></v-btn>
@@ -53,7 +53,7 @@ import {mapState, mapMutations, mapGetters, mapActions} from "vuex"
 export default {
     name: "my-app",
     computed: {
-        ...mapState(["username"]),
+        ...mapState(["display_name"]),
         ...mapState({"error": "last_error"}),
         ...mapGetters(["signed_in", "current_feedback"]),
         ...mapGetters({"show_dialog_state": "show_dialog"}),

@@ -19,7 +19,7 @@
                     <validation-provider name="password" rules="required" v-slot="{errors}">
                         <v-text-field
                             :type="show_password ? 'text' : 'password'"
-                            :append-icon="show_password ? 'visibility_off' : 'visibility'"
+                            :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
                             @click:append="show_password = !show_password"
                             label="Password"
                             v-model="password"
@@ -36,9 +36,9 @@
                     <v-btn type="submit"
                            color="primary"
                            text
-                           :loading="is_loading"
-                           :disabled="invalid || username === '' || password === ''"
-                           >Sign In</v-btn>
+                           :loading="_loading"
+                           :disabled="invalid || username === '' || password === ''">
+                           Sign In</v-btn>
                 </v-card-actions>
             </form>
         </validation-observer>
@@ -48,13 +48,10 @@
 
 <script>
 import {mapState, mapGetters, mapActions} from "vuex"
+import api from "../js/api.js"
 import store from "../js/store.js"
 export default {
     name: "app-signin",
-    computed: {
-        ...mapState({"error": "last_error"}),
-        ...mapGetters(["is_loading"]),
-    },
     data() {
         return {
             username: "",
@@ -62,10 +59,17 @@ export default {
             show_password: false,
         }
     },
+    computed: {
+        ...mapState({"error": "last_error"}),
+        ...mapGetters(["is_loading"]),
+        _loading() {
+            return this.is_loading([api.authenticate])
+        },
+    },
     methods: {
         ...mapActions(["authenticate"]),
         async do_authenticate(username, password) {
-            if (this.is_loading || !(await this.$refs.form.validate())) {
+            if (this._loading || !(await this.$refs.form.validate())) {
                 return
             }
 
@@ -74,7 +78,7 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         if (store.getters.signed_in) {
-            next({name: "content"})
+            next({name: "dashboard"})
             return
         }
         next()

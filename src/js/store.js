@@ -11,7 +11,8 @@ const store = new Vuex.Store({
     strict: process.env.NODE_ENV !== "production",
     state: {
         last_error: null,
-        _loading_count: 0,
+        _loading: {},
+        display_name: window.localStorage.getItem("display_name"),
         username: window.localStorage.getItem("username"),
         session_id: window.localStorage.getItem("session_id"),
         _next_route: null,
@@ -19,11 +20,17 @@ const store = new Vuex.Store({
         _next_dispatch_payload: null,
         _feedback: [],
         _feedback_delay: false,
-        thing: null,
     },
     getters: {
         is_loading(state) {
-            return state._loading_count !== 0
+            return (...keys) => {
+                for (const key of keys) {
+                    if (key in state._loading && state._loading[key] !== 0) {
+                        return true
+                    }
+                }
+                return false
+            }
         },
         next_route(state) {
             if (state._next_route == null) {
@@ -44,7 +51,7 @@ const store = new Vuex.Store({
         },
         $http(state) {
             return axios.create({
-                headers: {Authorization: "Session id=\"" + state.session_id + "\""},
+                headers: {Authorization: "Bearer " + state.session_id},
             })
         },
         current_feedback(state) {
@@ -58,20 +65,27 @@ const store = new Vuex.Store({
         UPDATE_ERROR(state, error) {
             state.last_error = error
         },
-        START_LOADING(state) {
-            state._loading_count++
+        START_LOADING(state, key) {
+            if (!(key in state._loading)) {
+                Vue.set(state._loading, key, 0)
+            }
+            state._loading[key]++
             state.last_error = null
         },
-        STOP_LOADING(state) {
-            state._loading_count--
+        STOP_LOADING(state, key) {
+            state._loading[key]--
         },
-        UPDATE_CREDENTIALS(state, {username, session_id}) {
+        UPDATE_CREDENTIALS(state, {display_name, username, session_id}) {
+            state.display_name = display_name
+            window.localStorage.setItem("display_name", display_name)
             state.username = username
             window.localStorage.setItem("username", username)
             state.session_id = session_id
             window.localStorage.setItem("session_id", session_id)
         },
         SIGNOUT(state) {
+            state.display_name = null
+            window.localStorage.removeItem("display_name")
             state.username = null
             window.localStorage.removeItem("username")
             state.session_id = null
@@ -97,20 +111,17 @@ const store = new Vuex.Store({
         CLEAR_FEEDBACK_DELAY(state) {
             state._feedback_delay = false
         },
-        UPDATE_THING(state, thing) {
-            state.thing = thing
-        },
     },
     actions: {
         async authenticate(context, {username, password}) {
-            context.commit("START_LOADING")
+            context.commit("START_LOADING", api.authenticate)
 
             try {
                 const response = await api.authenticate(username, password)
-                context.commit("STOP_LOADING")
-                context.commit("UPDATE_CREDENTIALS", {username, session_id: response.data.session_id})
+                context.commit("STOP_LOADING", api.authenticate)
+                context.commit("UPDATE_CREDENTIALS", {display_name: response.data.display_name, username, session_id: response.data.session_id})
             } catch (err) {
-                context.commit("STOP_LOADING")
+                context.commit("STOP_LOADING", api.authenticate)
                 if (err.response !== null && err.response.status === 401) {
                     context.commit("UPDATE_ERROR", "Wrong username or password")
                     return
@@ -126,7 +137,7 @@ const store = new Vuex.Store({
         next_route(context, router) {
             let next = context.getters.next_route
             if (next == null) {
-                next = {name: "content"}
+                next = {name: "dashboard"}
             }
             router.push(next)
             context.commit("UPDATE_NEXT_ROUTE", null)
@@ -144,25 +155,25 @@ const store = new Vuex.Store({
                 context.commit("CLEAR_FEEDBACK_DELAY")
             }, 500)
         },
-        async get_thing(context) {
-            context.commit("START_LOADING")
-
+        async api_action(context, {action, params}) {
+            context.commit("START_LOADING", action)
             try {
-                const response = await api.get_thing()
-                context.commit("STOP_LOADING")
-                context.commit("UPDATE_THING", response.data.msg)
-                context.commit("ADD_FEEDBACK", "Thing loaded")
+                const response = await action(...params)
+                context.commit("STOP_LOADING", action)
+                return response.data
             } catch (err) {
-                context.commit("STOP_LOADING")
+                context.commit("STOP_LOADING", action)
                 if (err.response !== null && err.response.status === 401) {
                     context.dispatch("signout")
-                    context.commit("ADD_FEEDBACK", "Session expired. Please sign back in to load Thing")
-                    context.commit("UPDATE_NEXT_DISPATCH", {action: "get_thing"})
+                    context.commit("ADD_FEEDBACK", "Session expired. Please sign back in")
+                } else if (err.response !== null && (err.response.status === 404 || err.response.status === 409)) {
+                    // pass
                 } else {
                     context.commit("UPDATE_ERROR", "Oops! Something bad happened. Contact your system administrator")
                     console.error({err: err})
                 }
-                return
+                // handle in caller
+                throw (err)
             }
         },
     },
