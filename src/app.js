@@ -8,6 +8,7 @@ import store from "./js/store.js"
 // signin/signout actions
 store.watch((state, getters) => getters.signed_in, signed_in => {
     if (!signed_in) {
+        store.commit("UPDATE_NEXT_ROUTE", router.currentRoute)
         router.push({name: "signin"})
     } else {
         store.dispatch("next_route", router)
