@@ -8,7 +8,7 @@
             <span v-show="display_name">{{display_name}}</span>
            <v-menu offset-y v-show="signed_in">
                 <template v-slot:activator="{on}">
-                    <v-btn icon v-on="on" v-show="signed_in"><v-icon>more_vert</v-icon></v-btn>
+                    <v-btn icon v-on="on" v-show="signed_in"><v-icon>mdi-dots-vertical</v-icon></v-btn>
                 </template>
                 <v-list>
                     <v-list-item @click="signout">
